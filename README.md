@@ -17,8 +17,8 @@ Course enrollment platform built as a React SPA with three Spring Boot microserv
 | Region | `eu-west-1` |
 | Frontend URL | `https://www.thecloudnine.in` |
 | API URL | `https://api.thecloudnine.in` |
-| EKS cluster | `cdec-eks-dev` |
-| Terraform state bucket | `cdec-alpha-terraform-state-atulyw` |
+| EKS cluster | `cloud-eks-dev` |
+| Terraform state bucket | `cloud-alpha-terraform-state-tanuy` |
 
 ---
 
