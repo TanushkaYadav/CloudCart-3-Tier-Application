@@ -1,4 +1,4 @@
-# CDEC Alpha — CloudBlitz Learning Platform
+# CloudCart Three-Tier-Application
 
 Course enrollment platform built as a React SPA with three Spring Boot microservices on AWS.
 
@@ -15,10 +15,10 @@ Course enrollment platform built as a React SPA with three Spring Boot microserv
 |----------|-------|
 | AWS account | `933516006319` |
 | Region | `eu-west-1` |
-| Frontend URL | `https://www.thecloudnine.in` |
-| API URL | `https://api.thecloudnine.in` |
+| Frontend URL | `https://www.cloudcart-app.online` |
+| API URL | `https://api.cloudcart-app.online` |
 | EKS cluster | `cloud-eks-dev` |
-| Terraform state bucket | `cloud-alpha-terraform-state-tanuy` |
+| Terraform state bucket | `cloudcart-terraform-state-tanuy` |
 
 ---
 
@@ -103,9 +103,9 @@ Frontend build-time API URLs (baked into the SPA):
 
 | Variable | Production value |
 |----------|------------------|
-| `VITE_AUTH_API` | `https://api.thecloudnine.in/api/auth` |
-| `VITE_COURSE_API` | `https://api.thecloudnine.in/api/courses` |
-| `VITE_ENROLL_API` | `https://api.thecloudnine.in/api/enroll` |
+| `VITE_AUTH_API` | `https://api.cloudcart-app.online/api/auth` |
+| `VITE_COURSE_API` | `https://api.cloudcart-app.online/api/courses` |
+| `VITE_ENROLL_API` | `https://api.cloudcart-app.online/api/enroll` |
 
 ---
 
@@ -148,7 +148,7 @@ Provisions:
 
 - S3 bucket for static assets
 - CloudFront distribution (ACM cert in `us-east-1`)
-- Route 53 hosted zone / DNS alias for `www.thecloudnine.in`
+- Route 53 hosted zone / DNS alias for `www.cloudcart-app.online`
 
 ```bash
 cd infrastructure/frontend
@@ -164,8 +164,8 @@ After apply, delegate your domain at the registrar using the `route53_name_serve
 **Key `terraform.tfvars` values:**
 
 ```hcl
-dns_zone_name   = "thecloudnine.in"
-dns_record_name = "www.thecloudnine.in"
+dns_zone_name   = "cloudcart-app.online"
+dns_record_name = "www.cloudcart-app.online"
 ```
 
 ### Step 2: Frontend application
@@ -178,9 +178,9 @@ dns_record_name = "www.thecloudnine.in"
 cd application/frontend
 npm ci
 
-export VITE_AUTH_API=https://api.thecloudnine.in/api/auth
-export VITE_COURSE_API=https://api.thecloudnine.in/api/courses
-export VITE_ENROLL_API=https://api.thecloudnine.in/api/enroll
+export VITE_AUTH_API=https://api.cloudcart-app.online/api/auth
+export VITE_COURSE_API=https://api.cloudcart-app.online/api/courses
+export VITE_ENROLL_API=https://api.cloudcart-app.online/api/enroll
 npm run build
 
 BUCKET=$(terraform -chdir=../../infrastructure/frontend output -raw s3_bucket_name)
@@ -218,14 +218,14 @@ terraform apply -var-file=terraform.tfvars
 **Key `terraform.tfvars` values:**
 
 ```hcl
-cluster_name       = "cdec-eks-dev"
+cluster_name       = "cloud-eks-dev"
 kubernetes_version = "1.34"
 enable_alb_ingress = true
-ingress_host       = "api.thecloudnine.in"
+ingress_host       = "api.cloudcart-app.online"
 include_caller_as_cluster_admin = true   # grants Jenkins/Terraform user kubectl access
 ```
 
-> **Prerequisite:** Create ECR repositories and an ACM certificate for `api.thecloudnine.in` in `eu-west-1` before deploying services.
+> **Prerequisite:** Create ECR repositories and an ACM certificate for `cloudcart-app.online` in `eu-west-1` before deploying services.
 
 ### Step 4: Backend services
 
@@ -318,12 +318,12 @@ After a full deploy:
 
 ```bash
 # Frontend
-curl -I https://www.thecloudnine.in
+curl -I https://www.cloudcart-app.online
 
 # API health endpoints
-curl https://api.thecloudnine.in/api/auth/health
-curl https://api.thecloudnine.in/api/courses/health
-curl https://api.thecloudnine.in/api/enroll/health
+curl https://api.cloudcart-app.online/api/auth/health
+curl https://api.cloudcart-app.online/api/courses/health
+curl https://api.cloudcart-app.online/api/enroll/health
 
 # EKS workloads
 aws eks update-kubeconfig --region eu-west-1 --name cdec-eks-dev
